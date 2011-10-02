@@ -83,11 +83,11 @@ app.post('/pickUser', function(req, res) {
   if (isPlayer !== true || req.body.username === undefined || req.body.job === undefined){
     res.send('<message><content>You are not in the game. Stop sending messages.</content></message>');
   } else {
-  if (gameStart===true && night===true && job==="mafia") {
+  if (gameStart===true && night===true && req.body.job==="mafia") {
     killPlayer(req.body.temp);
-  } else if (gameStart===true && night===true && job==="sherif") {
+  } else if (gameStart===true && night===true && req.body.job==="sherif") {
     res.send("<message><content>True if who you picked is Mafia. " + discoverPlayer(req.body.temp) + "</content></message>");
-  } else if (gameStart===true && night===true && job==="nurse") {
+  } else if (gameStart===true && night===true && req.body.job==="nurse") {
     savePlayer(req.body.temp);
   } else if (gameStart===true && night===false) {
     votePlayer(req.body.temp);
@@ -121,6 +121,10 @@ io.sockets.on('connection', function (socket) {
 
 
 // Setters
+
+function sendKill(index) {
+  io.sockets.emit('setName', { player: index, name: "DEAD" });
+}
 
 function setPlayer(name) {
   if (players.length < 4) {
@@ -156,6 +160,11 @@ function savePlayer(name) {
       }
     }
     nurseWent = true;
+    for(var i in players) {
+      if (players[i] === "DEAD") {
+        sendKill(i);
+      }
+    }
   }
 }
 
