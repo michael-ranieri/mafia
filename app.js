@@ -93,9 +93,6 @@ app.post('/pickUser', function(req, res) {
     } else if (gameStart===true && night===false) {
       votePlayer(req.body.temp);
     }
-    try {
-      res.send('<message><content>You have chosen '+req.body.temp+'.</content></message>');
-    } catch(err) {}
     if(mafiaWent === true && nurseWent === true && sherifWent === true) {
       night = false;
       io.sockets.emit('setTime', { time: "Day"});
@@ -109,6 +106,9 @@ app.post('/pickUser', function(req, res) {
         }
       }
     }
+    try {
+      res.send('<message><content>You have chosen '+req.body.temp+'.</content></message>');
+    } catch(err) {}
   }
 });
 
@@ -125,7 +125,9 @@ console.log("Express server listening on port %d in %s mode", app.address().port
 
 io.sockets.on('connection', function (socket) {
   socket.on('ready', function (data) {
-    socket.emit('state', { state: "this is the state"});
+    sendKill(2);
+    socket.emit('setTime', { time: "Day"});
+    socket.emit('setVotes', { votes: 5 });
     for(var i in players) {
       socket.emit('setName', { player: parseInt(i)+1, name: players[i]});
     }
