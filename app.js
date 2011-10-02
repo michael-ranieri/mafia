@@ -174,10 +174,9 @@ function savePlayer(name) {
 
 function discoverPlayer(name) {
   if (sherifWent === false) {
-    sherifWent === true;
+    sherifWent = true;
     return (isMafia === name);
   } else return "Already Guessed";
-  sherifWent = true;
 }
 
 function votePlayer(name) {
