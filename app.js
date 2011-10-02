@@ -80,7 +80,6 @@ app.post('/pickUser', function(req, res) {
       isPlayer = true;
     }
   }
-  console.log(mafiaWent + "\n" + nurseWent + "\n" + sherifWent );
   if (isPlayer !== true || req.body.username === undefined || req.body.job === undefined){
     res.send('<message><content>You are not in the game. Stop sending messages.</content></message>');
   } else {
@@ -135,7 +134,7 @@ io.sockets.on('connection', function (socket) {
 // Setters
 
 function sendKill(index) {
-  io.sockets.emit('setName', { player: index+1, name: "DEAD" });
+  io.sockets.emit('setName', { player: parseInt(index)+1, name: "DEAD" });
 }
 
 function setPlayer(name) {
@@ -155,9 +154,9 @@ function killPlayer(name) {
     for(var i in players) {
       if(players[i] === name) {
         isDying = name;
-        mafiaWent = true;
       }
     }
+    mafiaWent = true;
   }
 }
 
@@ -168,8 +167,8 @@ function savePlayer(name) {
           players[i] = isSaving;
       }
     }
-  }
   nurseWent = true;
+  }
 }
 
 function discoverPlayer(name) {
@@ -199,6 +198,7 @@ function votePlayer(name) {
     for(var i in playerVotes) {
       playerVotes[i] = 0;
     }
+    citizensVoted = 0;
     players[most] = "DEAD";
     sendKill[most];
     night = true;
@@ -206,5 +206,6 @@ function votePlayer(name) {
     nurseWent = false;
     sherifWent = false;
     io.sockets.emit('setTime', { time: "Night" });
+    io.sockets.emit('setVotes', { votes: citizensVoted });
   }
 }
