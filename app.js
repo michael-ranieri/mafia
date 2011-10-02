@@ -37,6 +37,11 @@ app.get('/', function(req, res){
   });
 });
 
+app.get('/postUser', function(req, res) {
+  console.log(req.body);
+  res.send("<message><content>Hello</content></message>");
+});
+
 app.post('/playerJoin', function(req, res){
   console.log(req.body);
   setPlayer(req.body.name);
