@@ -93,7 +93,9 @@ app.post('/pickUser', function(req, res) {
     } else if (gameStart===true && night===false) {
       votePlayer(req.body.temp);
     }
-    res.send('<message><content>You have chosen '+req.body.temp+'.</content></message>');
+    try {
+      res.send('<message><content>You have chosen '+req.body.temp+'.</content></message>');
+    } catch(err) {}
     if(mafiaWent === true && nurseWent === true && sherifWent === true) {
       night = false;
       io.sockets.emit('setTime', { time: "Day"});
