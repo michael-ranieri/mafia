@@ -50,7 +50,7 @@ app.get('/', function(req, res){
 
 app.post('/postUser', function(req, res) {
   //console.log(req.body);
-  if (players.length >= 4) {
+  if (players.length >= 3) {
     res.send("<message><content>Sorry, the game is full.</content></message>");
   } else {
   setPlayer(req.body.username);
@@ -125,9 +125,6 @@ console.log("Express server listening on port %d in %s mode", app.address().port
 
 io.sockets.on('connection', function (socket) {
   socket.on('ready', function (data) {
-    //sendKill(2);
-    //socket.emit('setTime', { time: "Day"});
-    //socket.emit('setVotes', { votes: 5 });
     for(var i in players) {
       socket.emit('setName', { player: parseInt(i)+1, name: players[i]});
     }
@@ -142,13 +139,14 @@ function sendKill(index) {
 }
 
 function setPlayer(name) {
-  if (players.length < 4) {
+  if (players.length < 3) {
     players.push(name);
     playerVotes.push(0);
     io.sockets.emit('setName', { player: players.length, name: players[players.length-1]});
   }
-  if (players.length >= 4) {
+  if (players.length >= 3) {
     gameStart = true;
+    console.log("GAME START");
   }
 }
 
@@ -190,7 +188,7 @@ function votePlayer(name) {
   citizensVoted++;
   io.sockets.emit('setVotes', { votes: citizensVoted });
 
-  if(citizensVoted >=4) {
+  if(citizensVoted >=3) {
     var most=0;
     for(var i in players) {
       if(playerVotes[i] >= playerVotes[most]){
