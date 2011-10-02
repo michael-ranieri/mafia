@@ -143,6 +143,7 @@ function killPlayer(name) {
       }
     }
   }
+  console.log(players);
 }
 
 function savePlayer(name) {
@@ -190,4 +191,5 @@ function votePlayer(name) {
     nurseWent = false;
     sherifWent = false;
   }
+  console.log(players);
 }
