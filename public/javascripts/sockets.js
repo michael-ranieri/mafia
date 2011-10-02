@@ -7,6 +7,7 @@ socket.on('state', function(data) {
 socket.on('setName', function(data) {
   $(".player_" + data.player).empty();
   $(".player_" + data.player).append("<p>" + data.name + "</p>");
+  $("p:contains('DEAD')").parent().parent().css("background-color", "red");
 });
 
 socket.on('setTime', function(data) {

@@ -2,8 +2,15 @@
 
 body {
   font-family: 'Andika', sans-serif;
+  text-align: center;
+  background-color: #C1C3C5;
+  font-size: 1.5em;
 }
 
 .box {
-  font-size: 2em;
+  font-size: 1.5em;
+  -moz-border-radius: 1em 1em 1em 1em;
+  border-radius: 1em 1em 1em 1em;
+  border-style:solid;
+  margin-bottom: .5em;
 }
