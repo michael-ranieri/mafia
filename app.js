@@ -71,6 +71,9 @@ app.post('/postUser', function(req, res) {
 });
 
 app.post('/pickUser', function(req, res) {
+  if (req.body.temp === undefined || req.body.username === undefined || req.body.job === undefined){
+    res.send('<message><content>You are not in the game. Stop sending messages.</content></message>');
+  } else {
   if (gameStart===true && night===true && job==="mafia") {
     killPlayer(req.body.temp);
   } else if (gameStart===true && night===true && job==="sherif") {
@@ -83,6 +86,7 @@ app.post('/pickUser', function(req, res) {
   res.send('<message><content>You have chosen '+req.body.temp+'.</content></message>');
   if(mafiaWent === true && nurseWent === true && sherifWent === true) {
     night = false;
+  }
   }
 });
 
