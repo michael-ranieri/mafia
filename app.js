@@ -37,7 +37,7 @@ app.get('/', function(req, res){
   });
 });
 
-app.get('/postUser', function(req, res) {
+app.post('/postUser', function(req, res) {
   console.log(req);
   res.send("<message><content>Hello</content></message>");
 });
