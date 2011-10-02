@@ -80,7 +80,7 @@ app.post('/pickUser', function(req, res) {
       isPlayer = true;
     }
   }
-
+  console.log(mafiaWent + "\n" + nurseWent + "\n" + sherifWent );
   if (isPlayer !== true || req.body.username === undefined || req.body.job === undefined){
     res.send('<message><content>You are not in the game. Stop sending messages.</content></message>');
   } else {
