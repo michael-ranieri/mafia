@@ -71,7 +71,16 @@ app.post('/postUser', function(req, res) {
 });
 
 app.post('/pickUser', function(req, res) {
-  if (req.body.temp === undefined || req.body.username === undefined || req.body.job === undefined){
+
+  var isPlayer = false;
+
+  for(var i in players) {
+    if (players[i] === req.body.username) {
+      isPlayer = true;
+    }
+  }
+
+  if (isPlayer !== true || req.body.username === undefined || req.body.job === undefined){
     res.send('<message><content>You are not in the game. Stop sending messages.</content></message>');
   } else {
   if (gameStart===true && night===true && job==="mafia") {
