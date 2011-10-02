@@ -39,22 +39,22 @@ app.get('/', function(req, res){
 
 app.post('/postUser', function(req, res) {
   console.log(req.body);
-  if (players.length === 10) {
+  if (players.length >= 10) {
     res.send("<message><content>Sorry, the game is full.</content></message>");
   } else {
-  setPlayer(req.body.username);
+  setPlayer(req.body.temp);
   if (players.length === 3) {
-      res.send("<message><content>You are the Mafia, keep it a secret! \
-      You get to kill people.</content></message>");
+      res.send('<block><set name="username">'+req.body.temp'</set><message><content>You are the Mafia, keep it a secret! \
+      You get to kill people.</content></message></block>');
     } else if (players.length === 4) {
-      res.send("<message><content>You are the Sherif! \
-      You get to find the mafia.</content></message>");
+      res.send('<block><set name="username">'+req.body.temp'</set><message><content>You are the Sherif! \
+      You get to find the mafia.</content></message></block>');
     } else if (players.length === 8) {
-      res.send("<message><content>You are the Nurse! \
-      You get to save a person.</content></message>");
+      res.send('<block><set name="username">'+req.body.temp'</set><message><content>You are the Nurse! \
+      You get to save a person.</content></message></block>');
     } else {
-      res.send("<message><content>You are a townsperson. \
-      Try to keep the mafia from killing you.</content></message>");
+      res.send('<block><set name="username">'+req.body.temp'</set><message><content>You are a townsperson. \
+      Try to keep the mafia from killing you.</content></message></block>');
     }
   }
 });
