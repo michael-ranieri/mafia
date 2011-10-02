@@ -44,16 +44,16 @@ app.post('/postUser', function(req, res) {
   } else {
   setPlayer(req.body.username);
   if (players.length === 3) {
-      res.send("<message><content>You are the Mafia, keep it a secret!
+      res.send("<message><content>You are the Mafia, keep it a secret! \
       You get to kill people.</content></message>");
     } else if (players.length === 4) {
-      res.send("<message><content>You are the Sherif!
+      res.send("<message><content>You are the Sherif! \
       You get to find the mafia.</content></message>");
     } else if (players.length === 8) {
-      res.send("<message><content>You are the Nurse!
+      res.send("<message><content>You are the Nurse! \
       You get to save a person.</content></message>");
     } else {
-      res.send("<message><content>You are a townsperson.
+      res.send("<message><content>You are a townsperson. \
       Try to keep the mafia from killing you.</content></message>");
     }
   }
