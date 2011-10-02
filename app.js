@@ -38,7 +38,7 @@ app.get('/', function(req, res){
 });
 
 app.post('/postUser', function(req, res) {
-  console.log(req);
+  console.log(req.body);
   res.send("<message><content>Hello</content></message>");
 });
 
