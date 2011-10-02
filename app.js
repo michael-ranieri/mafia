@@ -48,7 +48,7 @@ app.post('/playerJoin', function(req, res){
   res.send();
 });
 
-app.listen(80);
+app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
 // Socket.IO
