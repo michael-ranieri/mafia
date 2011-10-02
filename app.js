@@ -49,18 +49,18 @@ app.get('/', function(req, res){
 
 app.post('/postUser', function(req, res) {
   //console.log(req.body);
-  if (players.length >= 10) {
+  if (players.length >= 4) {
     res.send("<message><content>Sorry, the game is full.</content></message>");
   } else {
   setPlayer(req.body.username);
-  if (players.length === 3) {
+  if (players.length === 1) {
       isMafia = req.body.username;
       res.send('<block><set name="job">mafia</set><message><content>You are the Mafia, keep it a secret! \
       You get to kill people.</content></message></block>');
-    } else if (players.length === 4) {
+    } else if (players.length === 2) {
       res.send('<block><set name="job">sherif</set><message><content>You are the Sherif! \
       You get to find the mafia.</content></message></block>');
-    } else if (players.length === 8) {
+    } else if (players.length === 3) {
       res.send('<block><set name="job">nurse</set><message><content>You are the Nurse! \
       You get to save a person.</content></message></block>');
     } else {
@@ -123,12 +123,12 @@ io.sockets.on('connection', function (socket) {
 // Setters
 
 function setPlayer(name) {
-  if (players.length < 10) {
+  if (players.length < 4) {
     players.push(name);
     playerVotes.push(0);
     io.sockets.emit('setName', { player: players.length, name: players[players.length-1]});
   }
-  if (players.length >= 10) {
+  if (players.length >= 4) {
     gameStart = true;
   }
 }
@@ -173,7 +173,7 @@ function votePlayer(name) {
   }
   citizensVoted++;
 
-  if(citizensVoted >=10) {
+  if(citizensVoted >=4) {
     var most=0;
     for(var i in players) {
       if(playerVotes[i] >= playerVotes[most]){
