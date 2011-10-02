@@ -1,4 +1,4 @@
-var socket = io.connect('http://hack.parsely.com:3000');
+var socket = io.connect('http://hack.parsely.com');
 
 socket.on('state', function(data) {
   console.log(data);
