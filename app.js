@@ -10,12 +10,13 @@ var io = require('socket.io').listen(app);
 
 var players = [];
 var gameStart = false;
-var night = false;
+var night = true;
 var mafiaWent = false;
 var sherifWent = false;
 var nurseWent = false;
 var citizensVoted = 0;
 var isDying = "";
+var isSaving = "";
 var isMafia = "";
 var playerVotes = [];
 
@@ -83,19 +84,29 @@ app.post('/pickUser', function(req, res) {
   if (isPlayer !== true || req.body.username === undefined || req.body.job === undefined){
     res.send('<message><content>You are not in the game. Stop sending messages.</content></message>');
   } else {
-  if (gameStart===true && night===true && req.body.job==="mafia") {
-    killPlayer(req.body.temp);
-  } else if (gameStart===true && night===true && req.body.job==="sherif") {
-    res.send("<message><content>True if who you picked is Mafia. " + discoverPlayer(req.body.temp) + "</content></message>");
-  } else if (gameStart===true && night===true && req.body.job==="nurse") {
-    savePlayer(req.body.temp);
-  } else if (gameStart===true && night===false) {
-    votePlayer(req.body.temp);
-  }
-  res.send('<message><content>You have chosen '+req.body.temp+'.</content></message>');
-  if(mafiaWent === true && nurseWent === true && sherifWent === true) {
-    night = false;
-  }
+    if (gameStart===true && night===true && req.body.job==="mafia") {
+      killPlayer(req.body.temp);
+    } else if (gameStart===true && night===true && req.body.job==="sherif") {
+      res.send("<message><content>True if who you picked is Mafia. -  " + discoverPlayer(req.body.temp) + "</content></message>");
+    } else if (gameStart===true && night===true && req.body.job==="nurse") {
+      savePlayer(req.body.temp);
+    } else if (gameStart===true && night===false) {
+      votePlayer(req.body.temp);
+    }
+    res.send('<message><content>You have chosen '+req.body.temp+'.</content></message>');
+    if(mafiaWent === true && nurseWent === true && sherifWent === true) {
+      night = false;
+      io.sockets.emit('setTime', { time: "Day"});
+      if (isDying === isSaving) {
+      } else {
+        for (var i in players) {
+          if (players[i] === isDying) {
+            players[i] = "DEAD";
+            sendKill(i);
+          }
+        }
+      }
+    }
   }
 });
 
@@ -142,37 +153,28 @@ function killPlayer(name) {
     for(var i in players) {
       if(players[i] === name) {
         isDying = name;
-        players[i] = "DEAD";
         mafiaWent = true;
       }
     }
   }
-  console.log(players);
 }
 
 function savePlayer(name) {
   if (nurseWent === false) {
-    if (isDying === name) {
-      for(var i in players) {
-        if (players[i] === "DEAD") {
-          players[i] = isDying;
-        }
-      }
-    }
-    nurseWent = true;
     for(var i in players) {
-      if (players[i] === "DEAD") {
-        sendKill(i);
+      if (players[i] === name) {
+          players[i] = isSaving;
       }
     }
   }
+  nurseWent = true;
 }
 
 function discoverPlayer(name) {
   if (sherifWent === false) {
     sherifWent === true;
     return (isMafia === name);
-  } else return false;
+  } else return "Already Guessed";
 }
 
 function votePlayer(name) {
@@ -182,6 +184,7 @@ function votePlayer(name) {
     }
   }
   citizensVoted++;
+  io.sockets.emit('setVotes', { votes: citizensVoted });
 
   if(citizensVoted >=4) {
     var most=0;
@@ -195,10 +198,11 @@ function votePlayer(name) {
       playerVotes[i] = 0;
     }
     players[most] = "DEAD";
+    sendKill[most];
     night = true;
     mafiaWent = false;
     nurseWent = false;
     sherifWent = false;
+    io.sockets.emit('setTime', { time: "Night" });
   }
-  console.log(players);
 }
