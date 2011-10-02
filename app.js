@@ -8,6 +8,8 @@ var express = require('express');
 var app = module.exports = express.createServer();
 var io = require('socket.io').listen(app);
 
+var players = [];
+
 // Configuration
 
 app.configure(function(){
@@ -31,8 +33,14 @@ app.configure('production', function(){
 
 app.get('/', function(req, res){
   res.render('index', {
-    title: 'Express'
+    title: 'Mafia'
   });
+});
+
+app.post('/playerJoin', function(req, res){
+  console.log(req.body);
+  setPlayer(req.body.name);
+  res.send();
 });
 
 app.listen(3000);
@@ -41,9 +49,24 @@ console.log("Express server listening on port %d in %s mode", app.address().port
 // Socket.IO
 
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', {hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
+  socket.on('ready', function (data) {
+    socket.emit('state', { state: "this is the state"});
+    for(var i in players) {
+      socket.emit('setName', { player: parseInt(i)+1, name: players[i]});
+    }
   });
 });
+
+
+// Setters
+
+function setPlayer(name) {
+  if (players.length < 10) {
+    players.push(name);
+    io.sockets.emit('setName', { player: players.length, name: players[players.length-1]});
+  }
+}
+
+
+
 

@@ -1,5 +1,10 @@
 var socket = io.connect('http://localhost');
-socket.on('news', function (data) {
+
+socket.on('state', function(data) {
   console.log(data);
-  socket.emit('my other event', {my: 'data'});
+});
+
+socket.on('setName', function(data) {
+  $(".player_" + data.player).empty();
+  $(".player_" + data.player).append("<p>" + data.name + "</p>");
 });
