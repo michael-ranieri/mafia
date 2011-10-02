@@ -177,6 +177,7 @@ function discoverPlayer(name) {
     sherifWent === true;
     return (isMafia === name);
   } else return "Already Guessed";
+  sherifWent = true;
 }
 
 function votePlayer(name) {
