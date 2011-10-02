@@ -125,9 +125,9 @@ console.log("Express server listening on port %d in %s mode", app.address().port
 
 io.sockets.on('connection', function (socket) {
   socket.on('ready', function (data) {
-    sendKill(2);
-    socket.emit('setTime', { time: "Day"});
-    socket.emit('setVotes', { votes: 5 });
+    //sendKill(2);
+    //socket.emit('setTime', { time: "Day"});
+    //socket.emit('setVotes', { votes: 5 });
     for(var i in players) {
       socket.emit('setName', { player: parseInt(i)+1, name: players[i]});
     }
@@ -138,7 +138,7 @@ io.sockets.on('connection', function (socket) {
 // Setters
 
 function sendKill(index) {
-  io.sockets.emit('setName', { player: index, name: "DEAD" });
+  io.sockets.emit('setName', { player: index+1, name: "DEAD" });
 }
 
 function setPlayer(name) {
